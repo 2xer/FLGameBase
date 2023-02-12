@@ -1,6 +1,7 @@
 SHELL = /bin/sh
 CC=gcc
-CFLAGS=-Wall -Wextra
+CFLAGS=-Wall -Wextra -std=c++11 -c
+LDFLAGS=
 BUILDDIR=build
 
 OSFLAG 				:=
@@ -25,16 +26,16 @@ all: $(BUILDDIR)/fltk-gui
 
 # Build platform independent object files
 common: info dirs
-	$(shell g++ -c -std=c++11 $(OSFLAG) `fltk-config --cxxflags` src/fltk-gui.cpp -o build/obj/fltk-gui.o)
+	$(shell g++ $(CFLAGS) $(OSFLAG) `fltk-config --cxxflags` src/fltk-gui.cpp -o build/obj/fltk-gui.o)
 
 # Link platform independent object files
 build/fltk-gui: common
-	$(shell g++ -std=c++11 build/obj/fltk-gui.o `fltk-config --ldflags` -o build/fltk-gui)
+	$(shell g++ build/obj/fltk-gui.o -o build/fltk-gui `fltk-config --ldflags`)
 
 # Build and link MacOS object files
 build/fltk-gui-macos: common
 	$(shell gcc -c src/objc.m -o build/obj/objc.o)
-	$(shell g++ -std=c++11 build/obj/fltk-gui.o build/obj/objc.o -o build/fltk-gui-macos `fltk-config --ldflags` -framework AppKit)
+	$(shell g++ build/obj/fltk-gui.o build/obj/objc.o -o build/fltk-gui-macos `fltk-config --ldflags` -framework AppKit)
 
 # Build but keep intermediate files
 #debug: dirs debug-dirs

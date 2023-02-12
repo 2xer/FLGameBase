@@ -12,13 +12,11 @@ void show_info();
 void get_centered_xy(int width, int height);
 
 int main(int argc, char **argv) {
-    show_info();
-    get_centered_xy(200, 200);
+//    show_info();
+ //   get_centered_xy(200, 200);
 //    std::cout << "Centered (200 width) x: " << centered_xy.x << "\nCentered (200 height) y: " << centered_xy.y << std::endl;
-    Fl_Window *window = new Fl_Window(300,500,400,400,"Window Title");
-    Fl_Box *box = new Fl_Box(20,40,300,100,"Hello, World!");
-
-
+    Fl_Window *window = new Fl_Window(400,400,"FLGUI");
+    Fl_Box *box = new Fl_Box(20,40,300,100,"Box");
     box->box(FL_THIN_UP_BOX);
     box->labelfont(FL_BOLD+FL_ITALIC);
     box->labelsize(36);
