@@ -4,12 +4,6 @@
 #include <FL/Fl_Box.H>
 #include <string>
 
-#ifdef OSX
-std::string os = "OSX";
-#elif OS_GENERIC
-std::string os = "generic";
-#endif
-
 // Used to store get_centered_xy() results
 struct { int x; int y; } centered_xy;
 
@@ -41,7 +35,16 @@ void show_info() {
     std::cout << std::string(10, '=') << "Screen" << std::string(10, '=') << std::endl;
     std::cout << "Width\tHeight" << std::endl;
     std::cout << w << '\t' << h << std::endl;
-    std::cout << "OS: "  << os << std::endl;
+    std::cout << "OS: ";
+    #ifdef OSX
+    std::cout << "OSX" << std::endl;
+    #elif OS_GENERIC
+    std::cout << "Generic" << std::endl;
+    // If compiling directly with g++/gcc
+    #else
+    std::cout << "Generic" << std::endl;
+    #endif
+
 }
 void get_centered_xy(int width, int height) {
     centered_xy.x = (Fl::w() - width) / 2;
