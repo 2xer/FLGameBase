@@ -4,40 +4,19 @@ CXXFLAGS=`fltk-config --cxxflags` -Wall -Wextra -std=c++11 -c
 LDFLAGS=`fltk-config --ldflags`
 BUILDDIR=build
 
-OSFLAG 				:=
-ifeq ($(OS),Windows_NT)
-	OSFLAG = -D OS_GENERIC
-	OS = generic
-else
-	UNAME_S := $(shell uname -s)
-	ifeq ($(UNAME_S),Darwin)
-		OSFLAG = -D OSX
-		OS = OSX
-	else
-		OSFLAG = -D OS_GENERIC
-		OS = generic
-	endif
-endif
-
-.PHONY: all clean cleanall debug dirs debug-dirs common info
+.PHONY: all clean cleanall dirs debug-dirs common info
 .DEFAULT_GOAL := all
 
 all: $(BUILDDIR)/fltk-gui
 
-# Build platform independent object files
+# This is probably going to be needed by a lot of targets
 common: info dirs
 
 build/obj/fltk-gui.o: src/fltk-gui.cpp
 	$(shell g++ $(CXXFLAGS) $(OSFLAG) src/fltk-gui.cpp -o build/obj/fltk-gui.o)
 
-# Link platform independent object files
 build/fltk-gui: common build/obj/fltk-gui.o
 	$(shell g++ build/obj/fltk-gui.o -o build/fltk-gui $(LDFLAGS))
-
-# Build and link MacOS object files
-build/fltk-gui-macos: common
-	$(shell gcc -c src/objc.m -o build/obj/objc.o)
-	$(shell g++ build/obj/fltk-gui.o build/obj/objc.o -o build/fltk-gui-macos $(LDFLAGS) -framework AppKit)
 
 # Build but keep intermediate files
 #debug: dirs debug-dirs
@@ -50,12 +29,9 @@ build/fltk-gui-macos: common
 clean:
 	rm -rf $(BUILDDIR)/
 
-info:
-	@echo OS: $(OS)
-
 # Setup directories
 dirs: $(BUILDDIR)
 $(BUILDDIR):
 	mkdir -p $(BUILDDIR)/obj
-debug-dirs: dirs
-	mkdir -p $(BUILDDIR)/bc $(BUILDDIR)/ii $(BUILDDIR)/obj $(BUILDDIR)/s
+#debug-dirs: dirs
+#	mkdir -p $(BUILDDIR)/bc $(BUILDDIR)/ii $(BUILDDIR)/obj $(BUILDDIR)/s
