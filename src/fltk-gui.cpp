@@ -1,59 +1,39 @@
 #include <iostream>
+#include <string>
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Tabs.H>
-#include <string>
-
-// Used to store get_centered_xy() results
-struct { int x; int y; } centered_xy;
-
-void show_info();
-// Returns the x and y coordinates needed to center a window accurately with the specific width and height
-void get_centered_xy(int width, int height);
+#include <FL/Fl_Input.H>
+#include <FL/Fl_Secret_Input.H>
+#include <FL/Fl_Button.H>
 
 int main(int argc, char **argv) {
-    int x, y, w, h;
-    Fl::screen_work_area(x, y, w, h);
-//    show_info();
- //   get_centered_xy(200, 200);
-//    std::cout << "Centered (200 width) x: " << centered_xy.x << "\nCentered (200 height) y: " << centered_xy.y << std::endl;
-    Fl_Window *window = new Fl_Window(0,0,1000,600,"FLGUI");
-    Fl_Tabs *tabs1 = new Fl_Tabs(10,10,400,40); tabs1->selection_color(FL_DARK3);
+    Fl::scheme("gtk+");
+    int x,y,w,h;
+    Fl::screen_work_area(x,y,w,h);
+    Fl_Window *window = new Fl_Window(x,y,w,h,"FLGUI"); window->size_range(1210, 810);
+    x=y=w=h=0;
 
-    Fl_Group *group1 = new Fl_Group(10,60,200,200,"Group1"); group1->box(FL_THIN_UP_BOX); group1->labelsize(18); {
-    Fl_Box *box11 = new Fl_Box(10,60,100,100,"Box11"); box11->box(FL_THIN_UP_BOX); box11->labelsize(18);
-    Fl_Box *box12 = new Fl_Box(110,60,100,100,"Box12"); box12->box(FL_THIN_UP_BOX); box12->labelsize(18);
-    } group1->end();
+    x=10; y=10;
+    Fl_Tabs *tabs1 = new Fl_Tabs(x,y,1200,800); tabs1->selection_color(FL_DARK2); tabs1->box(FL_THIN_UP_BOX);{
+        y+=50;
+        Fl_Group *main = new Fl_Group(x,y,1200,750,"Main"); main->box(FL_THIN_UP_BOX); main->labelsize(20); main->labelfont(FL_BOLD);{
+            Fl_Box *statusLogin = new Fl_Box(x,y,400,25,"Status: ${PLACEHOLDER}"); statusLogin->box(FL_THIN_UP_BOX); statusLogin->labelsize(18); statusLogin->align(FL_ALIGN_LEFT | FL_ALIGN_TOP | FL_ALIGN_INSIDE); x+=80; y+=40;
+            Fl_Input *username = new Fl_Input(x,y,100,30,"Username: "); y+=40;
+            Fl_Secret_Input *password = new Fl_Secret_Input(x,y,100,30,"Password: "); x-=80; y+=40;
+            Fl_Button *login = new Fl_Button(x,y,90,30,"Login"); login->down_box(FL_THIN_DOWN_BOX); x+=110;
+            Fl_Button *signup = new Fl_Button(x,y,90,30,"Sign Up"); signup->down_box(FL_THIN_DOWN_BOX);
+        } main->end();
 
-    Fl_Group *group2 = new Fl_Group(10,60,200,200,"Group2"); group2->box(FL_THIN_UP_BOX); group2->labelsize(18); {
-    Fl_Box *box21 = new Fl_Box(10,60,100,100,"Box21"); box21->box(FL_THIN_UP_BOX); box21->labelsize(18);
-    Fl_Box *box22 = new Fl_Box(110,60,100,100,"Box22"); box22->box(FL_THIN_UP_BOX); box22->labelsize(18);
-    } group1->end();
 
-    tabs1->end();
-    window->resizable();
-    window->size_range(100, 100);
+        Fl_Group *group2 = new Fl_Group(10,60,1200,800,"Settings"); group2->box(FL_THIN_UP_BOX); group2->labelsize(18); {
+            Fl_Box *box1 = new Fl_Box(1400,60,100,100,"Box21"); box1->box(FL_THIN_UP_BOX); box1->labelsize(18);
+            Fl_Box *box2 = new Fl_Box(110,60,100,100,"Box22"); box2->box(FL_THIN_UP_BOX); box2->labelsize(18);
+        } group2->end();
+
+    } tabs1->end();
     window->end();
     window->show(argc, argv);
     return Fl::run();
 }
-
-void show_info() {
-    int w,h;
-    w = Fl::w();
-    h = Fl::h();
-    std::cout << std::string(10, '=') << "Screen" << std::string(10, '=') << std::endl;
-    std::cout << "Width\tHeight" << std::endl;
-    std::cout << w << '\t' << h << std::endl;
-    std::cout << "OS: ";
-}
-void get_centered_xy(int width, int height) {
-    centered_xy.x = (Fl::w() - width) / 2;
-    centered_xy.y = (Fl::y() - height) / 2;
-}
-
- void tabs1Callback(Fl_Widget *w, void*) {
-     Fl_Tabs *tabs = (Fl_Tabs*)w;
-     tabs->selection_color( (tabs->value())->color() );
- }

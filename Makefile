@@ -1,6 +1,6 @@
 SHELL = /bin/sh
 CC=gcc
-CXXFLAGS=`fltk-config --cxxflags` -Wall -Wextra -std=c++11
+CXXFLAGS=`fltk-config --cxxflags` -Wall -Wextra -std=c++11 -Wno-unused-variable
 LDFLAGS=`fltk-config --ldflags`
 BUILDDIR=build
 
